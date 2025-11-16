@@ -1,0 +1,6 @@
+{
+  "version": 2,
+  "rootDirectory": "yt-convert",
+  "installCommand": "npm install --legacy-peer-deps"
+}
+

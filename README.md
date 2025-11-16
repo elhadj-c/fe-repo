@@ -125,6 +125,83 @@ fe-repo/
 └── gitflow_rules.md    # Git workflow guidelines
 ```
 
+## Deploying to Vercel
+
+This project includes a `vercel.json` configuration file that tells Vercel where your Next.js app is located (in the `yt-convert` subdirectory).
+
+### Steps to Deploy:
+
+1. **Push your code to GitHub** (if not already done)
+
+2. **Go to [Vercel](https://vercel.com)** and sign in
+
+3. **Click "New Project"** and import your GitHub repository
+
+4. **Configure Environment Variables** (if using API keys):
+   - In Vercel project settings, go to "Environment Variables"
+   - Add:
+     - `YOUTUBE_API_KEY`
+     - `SPOTIFY_CLIENT_ID`
+     - `SPOTIFY_CLIENT_SECRET`
+
+5. **Deploy** - Vercel will automatically detect the configuration from `vercel.json`
+
+### If you get a 404 error:
+
+The `vercel.json` file in the root directory should fix this. If you still see a 404, follow these steps:
+
+#### Step 1: Verify vercel.json is committed and pushed
+```bash
+# Make sure vercel.json is in your repository
+git add vercel.json
+git commit -m "Add vercel.json configuration"
+git push
+```
+
+#### Step 2: Manually configure Root Directory in Vercel Dashboard
+
+**This is the most important step if vercel.json isn't being recognized:**
+
+1. Go to your project on [Vercel Dashboard](https://vercel.com/dashboard)
+2. Click on your project
+3. Go to **Settings** → **General**
+4. Scroll down to **Root Directory**
+5. Click **Edit**
+6. Select **Other** and enter: `yt-convert`
+7. Click **Save**
+
+#### Step 3: Verify Build Settings
+
+1. In Vercel project settings, go to **Settings** → **General**
+2. Check that:
+   - **Framework Preset** is set to `Next.js`
+   - **Build Command** is `npm run build` (or leave empty for auto-detection)
+   - **Output Directory** is empty (Next.js handles this automatically)
+   - **Install Command** is `npm install` (or leave empty for auto-detection)
+
+#### Step 4: Redeploy
+
+1. Go to the **Deployments** tab
+2. Click the **⋯** (three dots) menu on the latest deployment
+3. Click **Redeploy**
+4. Or push a new commit to trigger automatic redeployment
+
+#### Step 5: Check Build Logs
+
+If still getting 404, check the build logs:
+1. Go to **Deployments** tab
+2. Click on the failed deployment
+3. Check the **Build Logs** for any errors
+4. Look for messages about missing files or build failures
+
+#### Alternative: Delete and Recreate Project
+
+If nothing works, you can delete the project and recreate it:
+1. In Vercel dashboard, go to project **Settings** → **General**
+2. Scroll to bottom and click **Delete Project**
+3. Create a new project and import your repository
+4. **IMPORTANT:** When configuring, set **Root Directory** to `yt-convert` before deploying
+
 ## Troubleshooting
 
 - **Port 3000 already in use?** The app will automatically try the next available port, or you can specify a different port:
@@ -135,6 +212,17 @@ fe-repo/
 - **Dependencies not installing?** Try deleting `node_modules` and `package-lock.json`, then run `npm install` again.
 
 - **Build errors?** Make sure you're using a compatible Node.js version (18+).
+
+- **404 error on Vercel?** See the "Deploying to Vercel" section above. The `vercel.json` file should resolve this by specifying the correct root directory.
+
+- **"Command 'npm install' exited with 1" error?** This usually indicates dependency or Node version issues:
+  - The project now includes `engines` in `package.json` to specify Node 18+
+  - The `vercel.json` uses `--legacy-peer-deps` flag to handle peer dependency conflicts
+  - Make sure your Vercel project is using Node.js 18 or higher:
+    - Go to **Settings** → **General** → **Node.js Version**
+    - Set it to `18.x` or higher
+  - If the error persists, check the build logs for specific package errors
+  - You may need to update incompatible packages or use `npm install --legacy-peer-deps` locally to regenerate `package-lock.json`
 
 ## Additional Resources
 
