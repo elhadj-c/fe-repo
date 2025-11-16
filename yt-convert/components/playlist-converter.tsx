@@ -7,11 +7,8 @@ import { Textarea } from '@/components/ui/textarea'
 import { Loader2, Play, ArrowRight } from 'lucide-react'
 import { ConvertedPlaylist } from './converted-playlist'
 import { LinkPreview } from './link-preview'
-<<<<<<< HEAD
 import { Confetti } from './confetti'
-=======
 import { ThemeToggle } from './theme-toggle'
->>>>>>> feature/dark-mode
 
 interface ConvertedTrack {
   youtubeTitle: string
