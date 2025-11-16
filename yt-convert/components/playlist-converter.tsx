@@ -1,12 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Loader2, Play, ArrowRight } from 'lucide-react'
 import { ConvertedPlaylist } from './converted-playlist'
 import { LinkPreview } from './link-preview'
+import { Confetti } from './confetti'
 
 interface ConvertedTrack {
   youtubeTitle: string
@@ -20,11 +21,57 @@ interface ConvertedTrack {
   error?: string
 }
 
+interface ConfettiState {
+  x: number
+  y: number
+  id: number
+}
+
 export function PlaylistConverter() {
   const [youtubeLinks, setYoutubeLinks] = useState('')
   const [loading, setLoading] = useState(false)
   const [results, setResults] = useState<ConvertedTrack[]>([])
   const [error, setError] = useState('')
+  const [confettiList, setConfettiList] = useState<ConfettiState[]>([])
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const confettiIdRef = useRef(0)
+
+  const triggerConfetti = (x: number, y: number) => {
+    const id = confettiIdRef.current++
+    setConfettiList((prev) => [...prev, { x, y, id }])
+  }
+
+  const removeConfetti = (id: number) => {
+    setConfettiList((prev) => prev.filter((c) => c.id !== id))
+  }
+
+  const handleTextareaClick = (e: React.MouseEvent<HTMLTextAreaElement>) => {
+    const textarea = e.currentTarget
+    const rect = textarea.getBoundingClientRect()
+    // Get cursor position within textarea
+    const textBeforeCursor = textarea.value.substring(0, textarea.selectionStart)
+    const lines = textBeforeCursor.split('\n')
+    const currentLine = lines.length - 1
+    const x = rect.left + 12
+    const y = rect.top + 20 + currentLine * 20
+    triggerConfetti(x, y)
+  }
+
+  const handleTextareaKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter') {
+      // Small delay to let the newline be added first
+      setTimeout(() => {
+        const textarea = e.currentTarget
+        const rect = textarea.getBoundingClientRect()
+        const textBeforeCursor = textarea.value.substring(0, textarea.selectionStart)
+        const lines = textBeforeCursor.split('\n')
+        const lineNumber = lines.length - 1
+        const x = rect.left + 12
+        const y = rect.top + 20 + lineNumber * 20
+        triggerConfetti(x, y)
+      }, 10)
+    }
+  }
 
   const handleConvert = async () => {
     if (!youtubeLinks.trim()) {
@@ -89,18 +136,42 @@ export function PlaylistConverter() {
                 <label className="text-sm font-semibold text-foreground mb-3 block">
                   YouTube Links
                 </label>
-                <Textarea
-                  placeholder="Paste YouTube links here (one per line)&#10;Example:&#10;https://www.youtube.com/watch?v=..."
-                  value={youtubeLinks}
-                  onChange={(e) => {
-                    setYoutubeLinks(e.target.value)
-                    setError('')
-                  }}
-                  className="min-h-40 resize-none bg-secondary border-border text-foreground placeholder:text-muted-foreground"
-                />
-                <p className="text-xs text-muted-foreground mt-2">
-                  Supports YouTube URLs and video IDs
-                </p>
+                <div className="relative">
+                  <Textarea
+                    ref={textareaRef}
+                    placeholder="Paste YouTube links here (one per line)&#10;Example:&#10;https://www.youtube.com/watch?v=..."
+                    value={youtubeLinks}
+                    onChange={(e) => {
+                      setYoutubeLinks(e.target.value)
+                      setError('')
+                    }}
+                    onClick={handleTextareaClick}
+                    onKeyDown={handleTextareaKeyDown}
+                    className="min-h-40 resize-none bg-secondary border-border text-foreground placeholder:text-muted-foreground"
+                  />
+                  {confettiList.map((confetti) => (
+                    <Confetti
+                      key={confetti.id}
+                      x={confetti.x}
+                      y={confetti.y}
+                      onComplete={() => removeConfetti(confetti.id)}
+                    />
+                  ))}
+                </div>
+                <div className="mt-2 flex items-center justify-between">
+                  <p className="text-xs text-muted-foreground">
+                    Supports YouTube URLs and video IDs
+                  </p>
+                  <p className="text-xs font-medium text-foreground">
+                    {(() => {
+                      const linkCount = youtubeLinks
+                        .split('\n')
+                        .map((line) => line.trim())
+                        .filter((line) => line.length > 0).length
+                      return `${linkCount} ${linkCount === 1 ? 'link' : 'links'}`
+                    })()}
+                  </p>
+                </div>
               </div>
 
               <LinkPreview links={youtubeLinks} />
