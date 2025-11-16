@@ -139,7 +139,7 @@ export function PlaylistConverter() {
 
           <Card className="p-8 bg-card border-border">
             <div className="space-y-6">
-              <div>
+              <div className="animate-slide-down">
                 <label className="text-sm font-semibold text-foreground mb-3 block">
                   YouTube Links
                 </label>
@@ -192,7 +192,7 @@ export function PlaylistConverter() {
               <Button
                 onClick={handleConvert}
                 disabled={loading || !youtubeLinks.trim()}
-                className="w-full h-12 text-base font-semibold gap-2 bg-primary hover:bg-primary/90 text-primary-foreground"
+                className="w-full h-12 text-base font-semibold gap-2 bg-primary hover:bg-primary/90 text-primary-foreground animate-slide-down"
               >
                 {loading ? (
                   <>
