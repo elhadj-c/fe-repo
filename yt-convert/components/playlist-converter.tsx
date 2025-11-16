@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
@@ -36,6 +36,8 @@ export function PlaylistConverter() {
   const [confettiList, setConfettiList] = useState<ConfettiState[]>([])
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const confettiIdRef = useRef(0)
+  const inputContainerRef = useRef<HTMLDivElement>(null)
+  const buttonRef = useRef<HTMLButtonElement>(null)
 
   const triggerConfetti = (x: number, y: number) => {
     const id = confettiIdRef.current++
@@ -73,6 +75,49 @@ export function PlaylistConverter() {
       }, 10)
     }
   }
+
+  // Lazy animation trigger using IntersectionObserver
+  useEffect(() => {
+    // Check if IntersectionObserver is supported
+    if (typeof IntersectionObserver === 'undefined') {
+      // Fallback: trigger animations immediately
+      if (inputContainerRef.current) {
+        inputContainerRef.current.classList.add('animate-visible')
+      }
+      if (buttonRef.current) {
+        buttonRef.current.classList.add('animate-visible')
+      }
+      return
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate-visible')
+            // Unobserve after animation is triggered to improve performance
+            observer.unobserve(entry.target)
+          }
+        })
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '50px',
+      }
+    )
+
+    // Observe elements
+    if (inputContainerRef.current) {
+      observer.observe(inputContainerRef.current)
+    }
+    if (buttonRef.current) {
+      observer.observe(buttonRef.current)
+    }
+
+    return () => {
+      observer.disconnect()
+    }
+  }, [])
 
   const handleConvert = async () => {
     if (!youtubeLinks.trim()) {
@@ -136,7 +181,7 @@ export function PlaylistConverter() {
 
           <Card className="p-8 bg-card border-border">
             <div className="space-y-6">
-              <div className="animate-slide-down">
+              <div ref={inputContainerRef} className="animate-slide-down">
                 <label className="text-sm font-semibold text-foreground mb-3 block">
                   YouTube Links
                 </label>
@@ -187,9 +232,12 @@ export function PlaylistConverter() {
               )}
 
               <Button
+                ref={buttonRef}
                 onClick={handleConvert}
                 disabled={loading || !youtubeLinks.trim()}
                 className="w-full h-12 text-base font-semibold gap-2 bg-primary hover:bg-primary/90 text-primary-foreground animate-slide-down"
+                style={{ '--delay': '0.1s' } as React.CSSProperties}
+                data-delay
               >
                 {loading ? (
                   <>

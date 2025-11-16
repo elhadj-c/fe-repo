@@ -102,17 +102,67 @@
   }
 }
 
+/* Optimized slide-down animation - GPU accelerated */
 @keyframes slideDown {
   from {
     opacity: 0;
-    transform: translateY(-20px);
+    transform: translate3d(0, -20px, 0);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translate3d(0, 0, 0);
   }
 }
 
+/* Lazy animation class - only animates when element is visible */
 .animate-slide-down {
-  animation: slideDown 0.4s ease-out;
+  opacity: 0;
+  transform: translate3d(0, -20px, 0);
+  will-change: transform, opacity;
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+}
+
+.animate-slide-down.animate-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  will-change: auto;
+}
+
+/* Staggered animation for button */
+.animate-slide-down[data-delay] {
+  transition-delay: var(--delay, 0s);
+}
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .animate-slide-down {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    transition: none;
+  }
+}
+
+/* Confetti animation - optimized */
+@keyframes confetti-fall {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(var(--end-x, 0), var(--end-y, 0), 0) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.confetti-particle {
+  will-change: transform, opacity;
+  animation: confetti-fall 1s ease-out forwards;
+  animation-delay: var(--delay, 0s);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .confetti-particle {
+    animation: none;
+    opacity: 0;
+  }
 }

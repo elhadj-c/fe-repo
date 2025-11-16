@@ -80,7 +80,7 @@ export function ConvertedPlaylist({ results, onReset }: ConvertedPlaylistProps) 
           <div className="grid md:grid-cols-3 gap-4">
             <Card className="p-6 bg-card border-border">
               <div className="flex items-baseline gap-2">
-                <div className="text-3xl font-bold text-green-500">{successful}</div>
+                <div className="text-3xl font-bold text-primary">{successful}</div>
                 <p className="text-sm text-muted-foreground">Successfully Matched</p>
               </div>
             </Card>
@@ -109,7 +109,7 @@ export function ConvertedPlaylist({ results, onReset }: ConvertedPlaylistProps) 
                 <div className="flex items-start gap-4">
                   <div className="mt-0.5">
                     {result.status === 'success' && (
-                      <CheckCircle className="w-5 h-5 text-green-500" />
+                      <CheckCircle className="w-5 h-5 text-primary" />
                     )}
                     {result.status === 'error' && (
                       <AlertCircle className="w-5 h-5 text-destructive" />
