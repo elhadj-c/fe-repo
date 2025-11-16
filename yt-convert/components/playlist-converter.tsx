@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Loader2, Play, ArrowRight } from 'lucide-react'
 import { ConvertedPlaylist } from './converted-playlist'
+import { LinkPreview } from './link-preview'
 
 interface ConvertedTrack {
   youtubeTitle: string
@@ -101,6 +102,8 @@ export function PlaylistConverter() {
                   Supports YouTube URLs and video IDs
                 </p>
               </div>
+
+              <LinkPreview links={youtubeLinks} />
 
               {error && (
                 <div className="p-4 bg-destructive/20 border border-destructive/40 rounded-lg text-destructive text-sm">
