@@ -3,6 +3,7 @@
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, Download, CheckCircle, AlertCircle } from 'lucide-react'
+import { ThemeToggle } from './theme-toggle'
 
 interface ConvertedTrack {
   youtubeTitle: string
@@ -54,7 +55,7 @@ export function ConvertedPlaylist({ results, onReset }: ConvertedPlaylistProps) 
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <header className="border-b border-border bg-card">
-        <div className="max-w-6xl mx-auto px-6 py-4">
+        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <Button
             onClick={onReset}
             variant="ghost"
@@ -63,6 +64,7 @@ export function ConvertedPlaylist({ results, onReset }: ConvertedPlaylistProps) 
             <ArrowLeft className="w-4 h-4" />
             Back to Converter
           </Button>
+          <ThemeToggle />
         </div>
       </header>
 
