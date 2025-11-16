@@ -127,7 +127,7 @@ fe-repo/
 
 ## Deploying to Vercel
 
-This project includes a `vercel.json` configuration file that tells Vercel where your Next.js app is located (in the `yt-convert` subdirectory).
+**IMPORTANT:** This project has the Next.js app in the `yt-convert` subdirectory. You **must** configure the Root Directory in Vercel dashboard settings.
 
 ### Steps to Deploy:
 
@@ -137,30 +137,28 @@ This project includes a `vercel.json` configuration file that tells Vercel where
 
 3. **Click "New Project"** and import your GitHub repository
 
-4. **Configure Environment Variables** (if using API keys):
-   - In Vercel project settings, go to "Environment Variables"
+4. **CRITICAL: Set Root Directory BEFORE deploying:**
+   - In the project configuration screen, look for **Root Directory**
+   - Click **Edit** or **Configure**
+   - Select **Other** and enter: `yt-convert`
+   - **Do NOT deploy yet** - continue with the next steps
+
+5. **Configure Environment Variables** (if using API keys):
+   - In the same configuration screen, go to "Environment Variables"
    - Add:
      - `YOUTUBE_API_KEY`
      - `SPOTIFY_CLIENT_ID`
      - `SPOTIFY_CLIENT_SECRET`
 
-5. **Deploy** - Vercel will automatically detect the configuration from `vercel.json`
+6. **Deploy** - Now click Deploy. The `vercel.json` file will handle the install command with legacy peer deps.
 
 ### If you get a 404 error:
 
-The `vercel.json` file in the root directory should fix this. If you still see a 404, follow these steps:
+**The Root Directory MUST be set in Vercel Dashboard - it cannot be set in vercel.json.** Follow these steps:
 
-#### Step 1: Verify vercel.json is committed and pushed
-```bash
-# Make sure vercel.json is in your repository
-git add vercel.json
-git commit -m "Add vercel.json configuration"
-git push
-```
+#### Step 1: Manually configure Root Directory in Vercel Dashboard
 
-#### Step 2: Manually configure Root Directory in Vercel Dashboard
-
-**This is the most important step if vercel.json isn't being recognized:**
+**This is REQUIRED - Root Directory cannot be set in vercel.json:**
 
 1. Go to your project on [Vercel Dashboard](https://vercel.com/dashboard)
 2. Click on your project
@@ -170,14 +168,23 @@ git push
 6. Select **Other** and enter: `yt-convert`
 7. Click **Save**
 
+#### Step 2: Verify vercel.json is committed (for install command)
+```bash
+# Make sure vercel.json is in your repository
+git add vercel.json
+git commit -m "Add vercel.json configuration"
+git push
+```
+
 #### Step 3: Verify Build Settings
 
 1. In Vercel project settings, go to **Settings** → **General**
 2. Check that:
+   - **Root Directory** is set to `yt-convert` (this is the most important!)
    - **Framework Preset** is set to `Next.js`
    - **Build Command** is `npm run build` (or leave empty for auto-detection)
    - **Output Directory** is empty (Next.js handles this automatically)
-   - **Install Command** is `npm install` (or leave empty for auto-detection)
+   - **Install Command** should use `npm install --legacy-peer-deps` (or leave empty if vercel.json handles it)
 
 #### Step 4: Redeploy
 

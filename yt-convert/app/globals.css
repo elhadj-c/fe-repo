@@ -4,27 +4,27 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* YouTube-inspired light mode colors */
-  --background: oklch(0.98 0.002 248);
-  --foreground: oklch(0.15 0.04 248);
+  /* Spotify-inspired light mode colors */
+  --background: oklch(0.98 0.002 0);
+  --foreground: oklch(0.15 0.01 0);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.15 0.04 248);
+  --card-foreground: oklch(0.15 0.01 0);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.15 0.04 248);
-  --primary: oklch(0.65 0.3 15);
+  --popover-foreground: oklch(0.15 0.01 0);
+  --primary: oklch(0.65 0.15 145);
   --primary-foreground: oklch(0.98 0 0);
-  --secondary: oklch(0.92 0.08 280);
-  --secondary-foreground: oklch(0.2 0.05 260);
+  --secondary: oklch(0.92 0.01 0);
+  --secondary-foreground: oklch(0.2 0.01 0);
   --muted: oklch(0.95 0.01 0);
-  --muted-foreground: oklch(0.55 0.05 240);
-  --accent: oklch(0.65 0.3 15);
+  --muted-foreground: oklch(0.55 0.01 0);
+  --accent: oklch(0.65 0.15 145);
   --accent-foreground: oklch(0.98 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
+  --destructive: oklch(0.55 0.22 25);
   --destructive-foreground: oklch(0.98 0 0);
-  --border: oklch(0.92 0.02 280);
-  --input: oklch(0.95 0.02 280);
-  --ring: oklch(0.65 0.3 15);
-  --chart-1: oklch(0.65 0.3 15);
+  --border: oklch(0.9 0.01 0);
+  --input: oklch(0.95 0.01 0);
+  --ring: oklch(0.65 0.15 145);
+  --chart-1: oklch(0.65 0.15 145);
   --chart-2: oklch(0.6 0.15 20);
   --chart-3: oklch(0.55 0.15 140);
   --chart-4: oklch(0.5 0.15 340);
@@ -33,31 +33,31 @@
 }
 
 .dark {
-  /* YouTube-inspired dark mode - deep dark background with red accents */
-  --background: oklch(0.08 0.01 248);
+  /* Spotify dark mode - Spotify's signature dark theme with green accents */
+  --background: oklch(0.15 0.01 0);
   --foreground: oklch(0.95 0.01 0);
-  --card: oklch(0.14 0.02 248);
+  --card: oklch(0.18 0.01 0);
   --card-foreground: oklch(0.95 0.01 0);
-  --popover: oklch(0.14 0.02 248);
+  --popover: oklch(0.18 0.01 0);
   --popover-foreground: oklch(0.95 0.01 0);
-  --primary: oklch(0.65 0.3 15);
-  --primary-foreground: oklch(0.98 0 0);
-  --secondary: oklch(0.2 0.04 248);
-  --secondary-foreground: oklch(0.9 0.02 0);
-  --muted: oklch(0.25 0.02 248);
-  --muted-foreground: oklch(0.65 0.04 248);
-  --accent: oklch(0.65 0.3 15);
-  --accent-foreground: oklch(0.98 0 0);
-  --destructive: oklch(0.62 0.22 25);
-  --destructive-foreground: oklch(0.92 0.02 0);
-  --border: oklch(0.2 0.02 248);
-  --input: oklch(0.18 0.03 248);
-  --ring: oklch(0.65 0.3 15);
-  --chart-1: oklch(0.65 0.3 15);
-  --chart-2: oklch(0.65 0.25 20);
-  --chart-3: oklch(0.6 0.2 140);
-  --chart-4: oklch(0.55 0.2 340);
-  --chart-5: oklch(0.5 0.2 60);
+  --primary: oklch(0.65 0.15 145);
+  --primary-foreground: oklch(0.15 0.01 0);
+  --secondary: oklch(0.25 0.01 0);
+  --secondary-foreground: oklch(0.9 0.01 0);
+  --muted: oklch(0.22 0.01 0);
+  --muted-foreground: oklch(0.65 0.01 0);
+  --accent: oklch(0.65 0.15 145);
+  --accent-foreground: oklch(0.15 0.01 0);
+  --destructive: oklch(0.6 0.22 25);
+  --destructive-foreground: oklch(0.95 0.01 0);
+  --border: oklch(0.25 0.01 0);
+  --input: oklch(0.2 0.01 0);
+  --ring: oklch(0.65 0.15 145);
+  --chart-1: oklch(0.65 0.15 145);
+  --chart-2: oklch(0.6 0.15 20);
+  --chart-3: oklch(0.55 0.15 140);
+  --chart-4: oklch(0.5 0.15 340);
+  --chart-5: oklch(0.45 0.15 60);
 }
 
 @theme inline {
@@ -100,4 +100,20 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+@keyframes confetti-fall {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--end-x, 0), var(--end-y, 0)) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.confetti-particle {
+  animation: confetti-fall 1s ease-out forwards;
+  animation-delay: var(--delay, 0s);
 }
