@@ -7,6 +7,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Loader2, Play, ArrowRight } from 'lucide-react'
 import { ConvertedPlaylist } from './converted-playlist'
 import { LinkPreview } from './link-preview'
+import { ThemeToggle } from './theme-toggle'
 
 interface ConvertedTrack {
   youtubeTitle: string
@@ -63,14 +64,17 @@ export function PlaylistConverter() {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <header className="border-b border-border bg-card">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center gap-3">
-          <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
-            <Play className="w-5 h-5 text-primary-foreground fill-primary-foreground" />
+        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
+              <Play className="w-5 h-5 text-primary-foreground fill-primary-foreground" />
+            </div>
+            <div>
+              <h1 className="text-xl font-bold text-foreground">PlaySync</h1>
+              <p className="text-xs text-muted-foreground">YouTube to Spotify</p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-xl font-bold text-foreground">PlaySync</h1>
-            <p className="text-xs text-muted-foreground">YouTube to Spotify</p>
-          </div>
+          <ThemeToggle />
         </div>
       </header>
 
